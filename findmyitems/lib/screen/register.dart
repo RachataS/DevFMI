@@ -61,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 RequiredValidator(errorText: 'กรุณากรอก Email'),
                                 EmailValidator(
                                     errorText:
-                                        'รูปแบบ Email ไม่ถูกตต้อง กรุณากรอกอีกครั้ง')
+                                        'รูปแบบ Email ไม่ถูกต้อง กรุณากรอกอีกครั้ง')
                               ]),
                               onSaved: (var email) {
                                 profile.email = email;
@@ -100,7 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 } else if (password2.length < 8) {
                                   return 'รหัสผ่านต้องยาวกว่า 8 ตัวอักษร';
                                 } else if (profile.password !=
-                                    profile.password) {
+                                    profile.conpassword) {
                                   return 'รหัสผ่านไม่ตรงกัน';
                                 }
                               }),
@@ -122,7 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     formKey.currentState?.save();
                                     print(
                                         "Username = ${profile.username}\nEmail = ${profile.email}\npassword1 = ${profile.password}\npass2 = ${profile.conpassword}");
-                                    formKey.currentState?.reset();
+                                    //formKey.currentState?.reset();
                                   }
                                 },
                                 icon: Icon(Icons.add),
