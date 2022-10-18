@@ -122,6 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     formKey.currentState?.save();
                                     print(
                                         "Username = ${profile.username}\nEmail = ${profile.email}\npassword1 = ${profile.password}\npass2 = ${profile.conpassword}");
+                                    formKey.currentState?.reset();
                                   }
                                 },
                                 icon: Icon(Icons.add),
