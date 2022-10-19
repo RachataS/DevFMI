@@ -32,7 +32,8 @@ dependencies:
   form_field_validator: ^1.1.0
   firebase_core: ^1.24.0
   flutter_launcher_icons: ^0.10.0
-
+  firebase_auth: ^3.11.2
+  fluttertoast: ^8.1.1
 flutter_icons:
   android: true
   image_path: "assets/images/favicon.png"

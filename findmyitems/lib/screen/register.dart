@@ -1,8 +1,11 @@
 import 'package:findmyitems/model/profile.dart';
+import 'package:findmyitems/screen/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -100,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 } else if (password2.length < 8) {
                                   return 'รหัสผ่านต้องยาวกว่า 8 ตัวอักษร';
                                 } else if (profile.password !=
-                                    profile.password) {
+                                    profile.conpassword) {
                                   return 'รหัสผ่านไม่ตรงกัน';
                                 }
                               }),
@@ -117,11 +120,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: SizedBox(
                             width: 300,
                             child: ElevatedButton.icon(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (formKey.currentState!.validate()) {
                                     formKey.currentState?.save();
-                                    print(
-                                        "Username = ${profile.username}\nEmail = ${profile.email}\npassword1 = ${profile.password}\npass2 = ${profile.conpassword}");
+                                    try {
+                                      await FirebaseAuth.instance
+                                          .createUserWithEmailAndPassword(
+                                              email: profile.email,
+                                              password: profile.password)
+                                          .then((value) {
+                                        formKey.currentState?.reset();
+                                        Fluttertoast.showToast(
+                                            msg: "สร้างบัญชีผู้ใช้สำเร็จ",
+                                            gravity: ToastGravity.TOP);
+                                      });
+                                      Navigator.pushReplacement(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return HomeScreen();
+                                      }));
+                                    } on FirebaseAuthException catch (e) {
+                                      //print(e.code);
+                                      //print(e.message);
+                                      var messages;
+                                      if (e.code == "email-already-in-use") {
+                                        messages =
+                                            "อีเมลนี้เคยลงทะเบียนแล้ว โปรดเข้าสู่ระบบหรือเปลี่ยนอีเมล";
+                                      } else if (e.code == "weak-password") {
+                                        messages =
+                                            "รหัสผ่านต้องมีความยาวมากกว่า 8 ตัวอักษร";
+                                      } else {
+                                        messages = e.code;
+                                      }
+                                      Fluttertoast.showToast(
+                                          msg: messages,
+                                          gravity: ToastGravity.TOP);
+                                    }
                                   }
                                 },
                                 icon: Icon(Icons.add),
