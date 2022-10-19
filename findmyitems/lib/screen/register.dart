@@ -1,0 +1,180 @@
+import 'package:findmyitems/model/profile.dart';
+import 'package:findmyitems/screen/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  var password1, password2;
+  final formKey = GlobalKey<FormState>();
+  Profile profile = Profile();
+  final Future<FirebaseApp> firebase = Firebase.initializeApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: firebase,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Scaffold(
+            appBar: AppBar(title: Text("Error!")),
+            body: Center(
+              child: Text("${snapshot.error}"),
+            ),
+          );
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return Scaffold(
+            appBar: AppBar(title: Text("Register")),
+            body: Container(
+              child: Form(
+                key: formKey,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                          child: TextFormField(
+                              validator: RequiredValidator(
+                                  errorText: 'กรุณากรอก Username'),
+                              onSaved: (var username) {
+                                profile.username = username;
+                              },
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Enter Username',
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                          child: TextFormField(
+                              validator: MultiValidator([
+                                RequiredValidator(errorText: 'กรุณากรอก Email'),
+                                EmailValidator(
+                                    errorText:
+                                        'รูปแบบ Email ไม่ถูกตต้อง กรุณากรอกอีกครั้ง')
+                              ]),
+                              onSaved: (var email) {
+                                profile.email = email;
+                              },
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Enter Email',
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                          child: TextFormField(
+                              validator: ((password1) {
+                                if (password1!.isEmpty) {
+                                  return 'โปรดกรอกรหัสผ่าน';
+                                } else if (password1.length < 8) {
+                                  return 'รหัสผ่านต้องยาวกว่า 8 ตัวอักษร';
+                                }
+                              }),
+                              onSaved: (password1) {
+                                profile.password = password1;
+                              },
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Password',
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                          child: TextFormField(
+                              validator: ((password2) {
+                                if (password2!.isEmpty) {
+                                  return 'โปรดยืนยันรหัสผ่าน';
+                                } else if (password2.length < 8) {
+                                  return 'รหัสผ่านต้องยาวกว่า 8 ตัวอักษร';
+                                } else if (profile.password !=
+                                    profile.conpassword) {
+                                  return 'รหัสผ่านไม่ตรงกัน';
+                                }
+                              }),
+                              onSaved: (password2) {
+                                profile.conpassword = password2;
+                              },
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                labelText: 'Confirm Password',
+                              )),
+                        ),
+                        Center(
+                          child: SizedBox(
+                            width: 300,
+                            child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  if (formKey.currentState!.validate()) {
+                                    formKey.currentState?.save();
+                                    try {
+                                      await FirebaseAuth.instance
+                                          .createUserWithEmailAndPassword(
+                                              email: profile.email,
+                                              password: profile.password)
+                                          .then((value) {
+                                        formKey.currentState?.reset();
+                                        Fluttertoast.showToast(
+                                            msg: "สร้างบัญชีผู้ใช้สำเร็จ",
+                                            gravity: ToastGravity.TOP);
+                                      });
+                                      Navigator.pushReplacement(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return HomeScreen();
+                                      }));
+                                    } on FirebaseAuthException catch (e) {
+                                      //print(e.code);
+                                      //print(e.message);
+                                      var messages;
+                                      if (e.code == "email-already-in-use") {
+                                        messages =
+                                            "อีเมลนี้เคยลงทะเบียนแล้ว โปรดเข้าสู่ระบบหรือเปลี่ยนอีเมล";
+                                      } else if (e.code == "weak-password") {
+                                        messages =
+                                            "รหัสผ่านต้องมีความยาวมากกว่า 8 ตัวอักษร";
+                                      } else {
+                                        messages = e.code;
+                                      }
+                                      Fluttertoast.showToast(
+                                          msg: messages,
+                                          gravity: ToastGravity.TOP);
+                                    }
+                                  }
+                                },
+                                icon: Icon(Icons.add),
+                                label: Text("Register")),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
+  }
+}
