@@ -108,6 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               msg: e.code,
                                               gravity: ToastGravity.TOP);
                                         }
+                                        formKey.currentState?.reset();
                                       }
                                     },
                                     icon: Icon(Icons.login),
