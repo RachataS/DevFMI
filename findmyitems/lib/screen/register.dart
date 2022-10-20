@@ -1,4 +1,5 @@
 import 'package:findmyitems/model/profile.dart';
+import 'package:findmyitems/screen/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -127,6 +128,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           .createUserWithEmailAndPassword(
                                               email: profile.email,
                                               password: profile.password);
+                                      Fluttertoast.showToast(
+                                          msg: "สร้างบัญชีผู้ใช้สำเร็จ",
+                                          gravity: ToastGravity.TOP);
+                                      Navigator.pushReplacement(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return HomeScreen();
+                                      }));
                                     } on FirebaseAuthException catch (e) {
                                       var message;
                                       if (e.code == "email-already-in-use") {

@@ -23,32 +23,27 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: firebase,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Scaffold(
-              appBar: AppBar(title: Text("Error!")),
-              body: Center(
-                child: Text("${snapshot.error}"),
-              ),
-            );
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            return Scaffold(
-                appBar: AppBar(
-                  title: Text("Login"),
-                ),
-                body: Container(
-                  key: formKey,
-                  //Find My Items text
-                  padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
+      future: firebase,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Scaffold(
+            appBar: AppBar(title: Text("Error!")),
+            body: Center(
+              child: Text("${snapshot.error}"),
+            ),
+          );
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return Scaffold(
+            appBar: AppBar(title: Text("Login")),
+            body: Container(
+              child: Form(
+                key: formKey,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 50, 10, 20),
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
                         Image.asset("assets/images/FMIslogo.png"),
-                        /*Text(
-                      'Find My Items',
-                      style: CustomTextStyle.nameOfTextStyle,
-                    ),*/
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                           child: TextFormField(
@@ -56,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 RequiredValidator(errorText: 'กรุณากรอก Email'),
                                 EmailValidator(
                                     errorText:
-                                        'รูปแบบ Email ไม่ถูกตต้อง กรุณากรอกอีกครั้ง')
+                                        'รูปแบบ Email ไม่ถูกต้อง กรุณากรอกอีกครั้ง')
                               ]),
                               onSaved: (var email) {
                                 profile.email = email;
@@ -83,73 +78,78 @@ class _HomeScreenState extends State<HomeScreen> {
                               obscureText: true,
                               decoration: const InputDecoration(
                                 border: UnderlineInputBorder(),
-                                labelText: 'Enter Password',
+                                labelText: 'Password',
                               )),
                         ),
-
-                        //login button
-                        Column(
-                          children: [
-                            Center(
-                              //padding: const EdgeInsets.fromLTRB(50, 50, 50, 0),
-                              child: SizedBox(
-                                width: 300,
-                                child: ElevatedButton.icon(
-                                    onPressed: () async {
-                                      if (formKey.currentState!.validate()) {
-                                        formKey.currentState?.save();
-                                        try {
-                                          await FirebaseAuth.instance
-                                              .signInWithEmailAndPassword(
-                                                  email: profile.email,
-                                                  password: profile.password);
-                                        } on FirebaseAuthException catch (e) {
-                                          Fluttertoast.showToast(
-                                              msg: e.code,
-                                              gravity: ToastGravity.TOP);
-                                        }
-                                        formKey.currentState?.reset();
+                        Center(
+                          child: SizedBox(
+                            width: 300,
+                            child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  if (formKey.currentState!.validate()) {
+                                    formKey.currentState?.save();
+                                    try {
+                                      await FirebaseAuth.instance
+                                          .signInWithEmailAndPassword(
+                                              email: profile.email,
+                                              password: profile.password);
+                                      Fluttertoast.showToast(
+                                          msg: "เข้าสู่ระบบสำเร็จ",
+                                          gravity: ToastGravity.TOP);
+                                      Navigator.pushReplacement(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return mainHomeScreen();
+                                      }));
+                                    } on FirebaseAuthException catch (e) {
+                                      var message;
+                                      if (e.code == "email-already-in-use") {
+                                        message =
+                                            "อีเมลนี้เคยถูกใช้ลงทะเบียนแล้ว โปรดใช้อีเมลอื่นหรือเข้าสู่ระบบ";
+                                      } else if (e.code == "weak-password") {
+                                        message =
+                                            "รหัสผ่านต้องมีความยาวมากกว่า 8 ตัวอักษร";
+                                      } else {
+                                        message == e.code;
                                       }
-                                    },
-                                    icon: Icon(Icons.login),
-                                    label: Text("Login")),
-                              ),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return RegisterScreen();
-                                  }));
+                                      Fluttertoast.showToast(
+                                          msg: message,
+                                          gravity: ToastGravity.TOP);
+                                    }
+                                    formKey.currentState?.reset();
+                                  }
                                 },
-                                child: Text(
-                                  "Don't have an account? Register now!",
-                                  style: btTextStyle.nameOfTextStyle,
-                                ))
-                          ],
-                        )
+                                icon: Icon(Icons.login),
+                                label: Text("Login")),
+                          ),
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return RegisterScreen();
+                              }));
+                            },
+                            child: Text(
+                              "Don't have an account? Register now!",
+                              style: btTextStyle.nameOfTextStyle,
+                            ))
                       ],
                     ),
                   ),
-                ));
-          }
-          return Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
+                ),
+              ),
             ),
           );
-        });
+        }
+        return Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
   }
 }
-
-/*class CustomTextStyle {
-  static const TextStyle nameOfTextStyle = TextStyle(
-    fontSize: 40,
-    color: Colors.black,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'Inter',
-  );
-}*/
 
 class btTextStyle {
   static const TextStyle nameOfTextStyle =
