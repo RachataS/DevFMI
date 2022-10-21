@@ -23,8 +23,7 @@ class _RealHomeScreenState extends State<RealHomeScreen> {
     return Scaffold(
         appBar: AppBar(
           //Group add button
-          leading: FlatButton(
-            textColor: Colors.white,
+          leading: ElevatedButton(
             onPressed: () {},
             child: Icon(Icons.group_add),
           ),

@@ -20,13 +20,13 @@ class _MenuScreenState extends State<MenuScreen> {
   Profile profile = Profile();
   HomeScreen home = HomeScreen();
   final auth = FirebaseAuth.instance;
+  final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         //Group add button
-        leading: FlatButton(
-          textColor: Colors.white,
+        leading: ElevatedButton(
           onPressed: () {},
           child: Icon(Icons.group_add),
         ),
@@ -38,25 +38,53 @@ class _MenuScreenState extends State<MenuScreen> {
         children: [
           //logout button
           Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child: SizedBox(
-              width: 300,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  logout().then((value) {
-                    Fluttertoast.showToast(
-                        msg: "ออกจากระบบสำเร็จ", gravity: ToastGravity.TOP);
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return HomeScreen();
-                    }));
-                  });
-                },
-                icon: Icon(Icons.logout),
-                label: Text("Logout"),
-              ),
-            ),
-          )
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                    child: SizedBox(
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(user.photoURL!),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                    child: SizedBox(
+                      child: Text(
+                        user.displayName!,
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 20),
+                    child: SizedBox(
+                      child: Text(user.email!, style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 300,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        logout().then((value) {
+                          Fluttertoast.showToast(
+                              msg: "ออกจากระบบสำเร็จ",
+                              gravity: ToastGravity.TOP);
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) {
+                            return HomeScreen();
+                          }));
+                        });
+                      },
+                      icon: Icon(Icons.logout),
+                      label: Text("Logout"),
+                    ),
+                  ),
+                ],
+              ))
         ],
       )),
     );
