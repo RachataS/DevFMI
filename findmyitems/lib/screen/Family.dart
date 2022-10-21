@@ -13,6 +13,16 @@ class _FamilyScreenState extends State<FamilyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        //Group add button
+        leading: FlatButton(
+          textColor: Colors.white,
+          onPressed: () {},
+          child: Icon(Icons.group_add),
+        ),
+        title: Text("Family"),
+        centerTitle: true,
+      ),
       body: Center(
         child: Text("Family"),
       ),

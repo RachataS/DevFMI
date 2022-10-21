@@ -37,7 +37,7 @@ class _mainHomeScreenState extends State<mainHomeScreen> {
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         //Group add button
         leading: FlatButton(
           textColor: Colors.white,
@@ -61,7 +61,7 @@ class _mainHomeScreenState extends State<mainHomeScreen> {
             child: Icon(Icons.logout),
           ),
         ],
-      ),
+      ),*/
       body: screens[currentIndex],
       //Bottommenubar
       bottomNavigationBar: BottomNavigationBar(

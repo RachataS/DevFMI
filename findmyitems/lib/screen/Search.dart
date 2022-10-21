@@ -13,6 +13,16 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        //Group add button
+        leading: FlatButton(
+          textColor: Colors.white,
+          onPressed: () {},
+          child: Icon(Icons.group_add),
+        ),
+        title: Text("Search Items"),
+        centerTitle: true,
+      ),
       body: Center(
         child: Text("Search"),
       ),
