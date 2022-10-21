@@ -36,15 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         } else if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
-            appBar: AppBar(
+            /*appBar: AppBar(
               title: Text("Login"),
               centerTitle: true,
-            ),
+            ),*/
             body: Container(
               child: Form(
                 key: formKey,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 50, 10, 20),
+                  padding: const EdgeInsets.fromLTRB(10, 170, 10, 20),
                   child: SingleChildScrollView(
                     child: Column(
                       children: [

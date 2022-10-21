@@ -1,6 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:findmyitems/screen/Family.dart';
+import 'package:findmyitems/screen/Menu.dart';
+import 'package:findmyitems/screen/Search.dart';
 import 'package:findmyitems/screen/home.dart';
+import 'package:findmyitems/screen/realHome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +21,32 @@ class mainHomeScreen extends StatefulWidget {
 }
 
 class _mainHomeScreenState extends State<mainHomeScreen> {
+  int currentIndex = 0;
   Profile profile = Profile();
   HomeScreen home = HomeScreen();
   final auth = FirebaseAuth.instance;
+  //seclect screen
+  final screens = [
+    RealHomeScreen(),
+    SearchScreen(),
+    FamilyScreen(),
+    MenuScreen(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final FirebaseAuth auth = FirebaseAuth.instance;
     return Scaffold(
       appBar: AppBar(
+        //Group add button
+        leading: FlatButton(
+          textColor: Colors.white,
+          onPressed: () {},
+          child: Icon(Icons.group_add),
+        ),
         title: Text('Find My Items'),
-        //centerTitle: true,
+        centerTitle: true,
+        //logout button
         actions: <Widget>[
           FlatButton(
             textColor: Colors.white,
@@ -38,18 +58,41 @@ class _mainHomeScreenState extends State<mainHomeScreen> {
                 })));
               });
             },
-            child: Text("Logout"),
-            shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+            child: Icon(Icons.logout),
           ),
         ],
       ),
-      body: Column(children: [
-        Text("${auth.currentUser?.email}"),
-      ]),
+      body: screens[currentIndex],
+      //Bottommenubar
+      bottomNavigationBar: BottomNavigationBar(
+        iconSize: 30,
+        currentIndex: currentIndex,
+        onTap: (index) => setState(() => currentIndex = index),
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+            backgroundColor: Colors.red,
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: "Search",
+              backgroundColor: Colors.teal),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.group),
+              label: "Family",
+              backgroundColor: Colors.green),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.menu),
+              label: "Menu",
+              backgroundColor: Colors.blue)
+        ],
+      ),
     );
   }
 }
 
+//signout function
 Future logout() async {
   await GoogleSignIn().disconnect();
   FirebaseAuth.instance.signOut();
