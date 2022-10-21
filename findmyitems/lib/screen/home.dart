@@ -97,27 +97,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                       await FirebaseAuth.instance
                                           .signInWithEmailAndPassword(
                                               email: profile.email,
-                                              password: profile.password);
-                                      Fluttertoast.showToast(
-                                          msg: "เข้าสู่ระบบสำเร็จ",
-                                          gravity: ToastGravity.TOP);
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (context) {
-                                        return mainHomeScreen();
-                                      }));
+                                              password: profile.password)
+                                          .then((value) {
+                                        formKey.currentState?.reset();
+                                        Fluttertoast.showToast(
+                                            msg: "เข้าสู่ระบบสำเร็จ",
+                                            gravity: ToastGravity.TOP);
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return mainHomeScreen();
+                                        }));
+                                      });
                                     } on FirebaseAuthException catch (e) {
-                                      var message;
-                                      if (e.code == "email-already-in-use") {
-                                        message =
-                                            "อีเมลนี้เคยถูกใช้ลงทะเบียนแล้ว โปรดใช้อีเมลอื่นหรือเข้าสู่ระบบ";
-                                      } else if (e.code == "weak-password") {
-                                        message =
-                                            "รหัสผ่านต้องมีความยาวมากกว่า 8 ตัวอักษร";
-                                      } else {
-                                        message == e.message;
-                                      }
                                       Fluttertoast.showToast(
-                                          msg: message,
+                                          msg: e.code,
                                           gravity: ToastGravity.TOP);
                                     }
                                     formKey.currentState?.reset();
@@ -138,14 +132,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: ElevatedButton(
                             onPressed: () {
                               try {
-                                GooglesignInProvider().googleLogin();
-                                Fluttertoast.showToast(
-                                    msg: "เข้าสู่ระบบสำเร็จ",
-                                    gravity: ToastGravity.TOP);
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return mainHomeScreen();
-                                }));
+                                GooglesignInProvider()
+                                    .googleLogin()
+                                    .then((value) {
+                                  Fluttertoast.showToast(
+                                      msg: "เข้าสู่ระบบสำเร็จ",
+                                      gravity: ToastGravity.TOP);
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return mainHomeScreen();
+                                  }));
+                                });
                               } catch (e) {
                                 Fluttertoast.showToast(
                                     msg: "เข้าสู่ระบบด้วย google ไม่สำเร็จ",
