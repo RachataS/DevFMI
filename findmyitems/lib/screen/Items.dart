@@ -1,19 +1,18 @@
+import 'package:findmyitems/model/profile.dart';
 import 'package:findmyitems/screen/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import '../model/profile.dart';
-
-class RealHomeScreen extends StatefulWidget {
-  const RealHomeScreen({Key? key}) : super(key: key);
+class ItemsScreen extends StatefulWidget {
+  const ItemsScreen({super.key});
 
   @override
-  State<RealHomeScreen> createState() => _RealHomeScreenState();
+  State<ItemsScreen> createState() => _ItemsScreenState();
 }
 
-class _RealHomeScreenState extends State<RealHomeScreen> {
+class _ItemsScreenState extends State<ItemsScreen> {
   int currentIndex = 0;
   Profile profile = Profile();
   HomeScreen home = HomeScreen();
@@ -27,7 +26,7 @@ class _RealHomeScreenState extends State<RealHomeScreen> {
             onPressed: () {},
             child: Icon(Icons.group_add),
           ),
-          title: Text("Find My Items"),
+          title: Text("Items"),
           centerTitle: true,
         ),
         body: Center(

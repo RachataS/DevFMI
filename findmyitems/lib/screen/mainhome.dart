@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:findmyitems/screen/Family.dart';
+import 'package:findmyitems/screen/Items.dart';
 import 'package:findmyitems/screen/Menu.dart';
 import 'package:findmyitems/screen/Search.dart';
 import 'package:findmyitems/screen/home.dart';
@@ -27,7 +28,7 @@ class _mainHomeScreenState extends State<mainHomeScreen> {
   final auth = FirebaseAuth.instance;
   //seclect screen
   final screens = [
-    RealHomeScreen(),
+    ItemsScreen(),
     SearchScreen(),
     FamilyScreen(),
     MenuScreen(),
@@ -39,8 +40,7 @@ class _mainHomeScreenState extends State<mainHomeScreen> {
     return Scaffold(
       /*appBar: AppBar(
         //Group add button
-        leading: FlatButton(
-          textColor: Colors.white,
+        leading: ElevatedButton(
           onPressed: () {},
           child: Icon(Icons.group_add),
         ),
@@ -48,8 +48,7 @@ class _mainHomeScreenState extends State<mainHomeScreen> {
         centerTitle: true,
         //logout button
         actions: <Widget>[
-          FlatButton(
-            textColor: Colors.white,
+          ElevatedButton(
             onPressed: () {
               logout().then((value) {
                 Navigator.pushReplacement(context,
