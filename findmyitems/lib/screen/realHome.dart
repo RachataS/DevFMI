@@ -31,7 +31,9 @@ class _RealHomeScreenState extends State<RealHomeScreen> {
           centerTitle: true,
         ),
         body: Center(
-          child: Column(),
+          child: Column(
+            children: [Text("room")],
+          ),
         ));
   }
 }

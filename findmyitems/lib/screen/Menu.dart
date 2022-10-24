@@ -1,7 +1,9 @@
 import 'package:findmyitems/model/profile.dart';
+import 'package:findmyitems/screen/Family.dart';
 import 'package:findmyitems/screen/googleprofile.dart';
 import 'package:findmyitems/screen/home.dart';
 import 'package:findmyitems/screen/mainhome.dart';
+import 'package:findmyitems/screen/realHome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -23,6 +25,7 @@ class _MenuScreenState extends State<MenuScreen> {
   final user = FirebaseAuth.instance.currentUser!;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
+  HomeScreen check = HomeScreen();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,9 +47,11 @@ class _MenuScreenState extends State<MenuScreen> {
               width: 300,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  print(check);
+                  showprofile();
+                  /*Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return GoogleProfileScreen();
-                  }));
+                  }));*/
                 },
                 icon: Icon(Icons.account_circle),
                 label: Text("Profile"),
@@ -87,5 +92,17 @@ class _MenuScreenState extends State<MenuScreen> {
     await firebaseAuth.signOut();
     // Sign out with google
     await googleSignIn.signOut();
+  }
+
+  Future<Null> showprofile() async {
+    if (check == 0) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return RealHomeScreen();
+      }));
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return GoogleProfileScreen();
+      }));
+    }
   }
 }
