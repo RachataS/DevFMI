@@ -1,3 +1,4 @@
+import 'package:findmyitems/model/logincheck.dart';
 import 'package:findmyitems/model/profile.dart';
 import 'package:findmyitems/screen/mainhome.dart';
 import 'package:findmyitems/screen/register.dart';
@@ -19,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Logincheck check = Logincheck();
   final formKey = GlobalKey<FormState>();
   Profile profile = Profile();
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
@@ -36,10 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         } else if (snapshot.connectionState == ConnectionState.done) {
           return Scaffold(
-            /*appBar: AppBar(
-              title: Text("Login"),
-              centerTitle: true,
-            ),*/
             body: Container(
               child: Form(
                 key: formKey,
@@ -94,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (formKey.currentState!.validate()) {
                                     formKey.currentState?.save();
                                     try {
+                                      //check.check += 1;
                                       await FirebaseAuth.instance
                                           .signInWithEmailAndPassword(
                                               email: profile.email,
@@ -138,6 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Fluttertoast.showToast(
                                       msg: "เข้าสู่ระบบสำเร็จ",
                                       gravity: ToastGravity.TOP);
+                                  check.check += 2;
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return mainHomeScreen();

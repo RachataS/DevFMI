@@ -1,4 +1,6 @@
+import 'package:findmyitems/model/logincheck.dart';
 import 'package:findmyitems/model/profile.dart';
+import 'package:findmyitems/screen/googleprofile.dart';
 import 'package:findmyitems/screen/home.dart';
 import 'package:findmyitems/screen/mainhome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/single_child_widget.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -16,9 +19,8 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  int currentIndex = 0;
+  Logincheck check = Logincheck();
   Profile profile = Profile();
-  HomeScreen home = HomeScreen();
   final auth = FirebaseAuth.instance;
   final user = FirebaseAuth.instance.currentUser!;
   @override
@@ -36,40 +38,35 @@ class _MenuScreenState extends State<MenuScreen> {
       body: Center(
           child: Column(
         children: [
-          //logout button
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: SizedBox(
+              width: 300,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  if (check.check == 2) {
+                    print(check.check);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return GoogleProfileScreen();
+                    }));
+                  }
+                },
+                icon: Icon(Icons.account_circle),
+                label: Text("Profile"),
+              ),
+            ),
+          ),
           Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
-                    child: SizedBox(
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(user.photoURL!),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                    child: SizedBox(
-                      child: Text(
-                        user.displayName!,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 20),
-                    child: SizedBox(
-                      child: Text(user.email!, style: TextStyle(fontSize: 16)),
-                    ),
-                  ),
                   SizedBox(
                     width: 300,
                     child: ElevatedButton.icon(
                       onPressed: () {
                         logout().then((value) {
+                          check.check = 0;
                           Fluttertoast.showToast(
                               msg: "ออกจากระบบสำเร็จ",
                               gravity: ToastGravity.TOP);
@@ -94,4 +91,11 @@ class _MenuScreenState extends State<MenuScreen> {
 Future logout() async {
   await GoogleSignIn().disconnect();
   FirebaseAuth.instance.signOut();
+}
+
+logincheck() {
+  Logincheck check = Logincheck();
+  Profile profile = Profile();
+  final auth = FirebaseAuth.instance;
+  final user = FirebaseAuth.instance.currentUser!;
 }
