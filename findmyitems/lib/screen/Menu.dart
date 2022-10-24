@@ -21,6 +21,8 @@ class _MenuScreenState extends State<MenuScreen> {
   Profile profile = Profile();
   final auth = FirebaseAuth.instance;
   final user = FirebaseAuth.instance.currentUser!;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = new GoogleSignIn();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,9 +81,11 @@ class _MenuScreenState extends State<MenuScreen> {
       )),
     );
   }
-}
 
-Future logout() async {
-  await GoogleSignIn().disconnect();
-  FirebaseAuth.instance.signOut();
+  Future<Null> logout() async {
+    // Sign out with email
+    await firebaseAuth.signOut();
+    // Sign out with google
+    await googleSignIn.signOut();
+  }
 }
