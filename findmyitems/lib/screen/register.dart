@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findmyitems/model/profile.dart';
 import 'package:findmyitems/screen/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,6 +21,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final formKey = GlobalKey<FormState>();
   Profile profile = Profile();
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
+  CollectionReference _notgoogleprofileCollection =
+      FirebaseFirestore.instance.collection("Profile");
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +137,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           .createUserWithEmailAndPassword(
                                               email: profile.email,
                                               password: profile.password);
+                                      await _notgoogleprofileCollection.add({
+                                        "Username": profile.username,
+                                        "Email": profile.email,
+                                        "password": profile.password,
+                                      });
                                       Fluttertoast.showToast(
                                           msg: "สร้างบัญชีผู้ใช้สำเร็จ",
                                           gravity: ToastGravity.TOP);

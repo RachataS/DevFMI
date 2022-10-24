@@ -1,4 +1,3 @@
-import 'package:findmyitems/model/logincheck.dart';
 import 'package:findmyitems/model/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ class GoogleProfileScreen extends StatefulWidget {
 }
 
 class _GoogleProfileScreenState extends State<GoogleProfileScreen> {
-  Logincheck check = Logincheck();
   Profile profile = Profile();
   final auth = FirebaseAuth.instance;
   final user = FirebaseAuth.instance.currentUser!;

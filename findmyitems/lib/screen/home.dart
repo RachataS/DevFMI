@@ -1,4 +1,3 @@
-import 'package:findmyitems/model/logincheck.dart';
 import 'package:findmyitems/model/profile.dart';
 import 'package:findmyitems/screen/mainhome.dart';
 import 'package:findmyitems/screen/register.dart';
@@ -20,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Logincheck check = Logincheck();
   final formKey = GlobalKey<FormState>();
   Profile profile = Profile();
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
@@ -137,7 +135,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Fluttertoast.showToast(
                                       msg: "เข้าสู่ระบบสำเร็จ",
                                       gravity: ToastGravity.TOP);
-                                  check.check += 2;
                                   Navigator.push(context,
                                       MaterialPageRoute(builder: (context) {
                                     return mainHomeScreen();

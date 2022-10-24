@@ -1,4 +1,3 @@
-import 'package:findmyitems/model/logincheck.dart';
 import 'package:findmyitems/model/profile.dart';
 import 'package:findmyitems/screen/googleprofile.dart';
 import 'package:findmyitems/screen/home.dart';
@@ -19,7 +18,6 @@ class MenuScreen extends StatefulWidget {
 }
 
 class _MenuScreenState extends State<MenuScreen> {
-  Logincheck check = Logincheck();
   Profile profile = Profile();
   final auth = FirebaseAuth.instance;
   final user = FirebaseAuth.instance.currentUser!;
@@ -44,13 +42,9 @@ class _MenuScreenState extends State<MenuScreen> {
               width: 300,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  if (check.check == 2) {
-                    print(check.check);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return GoogleProfileScreen();
-                    }));
-                  }
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return GoogleProfileScreen();
+                  }));
                 },
                 icon: Icon(Icons.account_circle),
                 label: Text("Profile"),
@@ -66,7 +60,6 @@ class _MenuScreenState extends State<MenuScreen> {
                     child: ElevatedButton.icon(
                       onPressed: () {
                         logout().then((value) {
-                          check.check = 0;
                           Fluttertoast.showToast(
                               msg: "ออกจากระบบสำเร็จ",
                               gravity: ToastGravity.TOP);
@@ -91,11 +84,4 @@ class _MenuScreenState extends State<MenuScreen> {
 Future logout() async {
   await GoogleSignIn().disconnect();
   FirebaseAuth.instance.signOut();
-}
-
-logincheck() {
-  Logincheck check = Logincheck();
-  Profile profile = Profile();
-  final auth = FirebaseAuth.instance;
-  final user = FirebaseAuth.instance.currentUser!;
 }
