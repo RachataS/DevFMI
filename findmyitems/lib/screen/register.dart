@@ -111,8 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   return 'โปรดยืนยันรหัสผ่าน';
                                 } else if (password2.length < 8) {
                                   return 'รหัสผ่านต้องยาวกว่า 8 ตัวอักษร';
-                                } else if (profile.password !=
-                                    profile.password) {
+                                } else if (password1 != password2) {
                                   return 'รหัสผ่านไม่ตรงกัน';
                                 }
                               }),
