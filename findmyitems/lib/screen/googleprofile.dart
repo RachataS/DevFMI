@@ -18,7 +18,10 @@ class _GoogleProfileScreenState extends State<GoogleProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Profile")),
+        appBar: AppBar(
+          title: Text("Profile"),
+          backgroundColor: Colors.blue,
+        ),
         body: Center(
           child: Column(
             children: [

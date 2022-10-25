@@ -15,7 +15,11 @@ class _EmailProfileScreenState extends State<EmailProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Profile"),centerTitle: true,),
+      appBar: AppBar(
+        title: Text("Profile"),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+      ),
       /*body: StreamBuilder(
         stream: FirebaseFirestore.instance?.collection("Profile").snapshots(),
         builder: (context,AsyncSnapshot<QuerySnapshot> snapshot){
