@@ -1,5 +1,6 @@
 import 'package:findmyitems/model/profile.dart';
 import 'package:findmyitems/screen/Family.dart';
+import 'package:findmyitems/screen/emailprofile.dart';
 import 'package:findmyitems/screen/googleprofile.dart';
 import 'package:findmyitems/screen/home.dart';
 import 'package:findmyitems/screen/mainhome.dart';
@@ -95,14 +96,14 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   Future<Null> showprofile() async {
-    if (check == 0) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return RealHomeScreen();
-      }));
-    } else {
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
+      if(user.photoURL != null){
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
         return GoogleProfileScreen();
       }));
-    }
+      }else{
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return EmailProfileScreen();
+      }));
+      }
   }
 }
