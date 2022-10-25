@@ -21,11 +21,11 @@ class _RealHomeScreenState extends State<RealHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        appBar: AppBar(backgroundColor:Colors.blue,
           //Group add button
-          leading: ElevatedButton(
+          leading: IconButton(
             onPressed: () {},
-            child: Icon(Icons.group_add),
+            icon: const Icon(Icons.group_add),
           ),
           title: Text("Find My Items"),
           centerTitle: true,

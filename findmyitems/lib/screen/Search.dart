@@ -14,10 +14,11 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.teal,
         //Group add button
-        leading: ElevatedButton(
+        leading: IconButton(
+          icon: const Icon(Icons.group_add),
           onPressed: () {},
-          child: Icon(Icons.group_add),
         ),
         title: Text("Search Items"),
         centerTitle: true,

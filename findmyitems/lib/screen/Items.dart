@@ -22,9 +22,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
     return Scaffold(
         appBar: AppBar(
           //Group add button
-          leading: ElevatedButton(
+          leading: IconButton(
+            icon: const Icon(Icons.group_add),
             onPressed: () {},
-            child: Icon(Icons.group_add),
           ),
           title: Text("Items"),
           centerTitle: true,

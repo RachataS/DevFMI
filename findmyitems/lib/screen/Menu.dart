@@ -31,10 +31,11 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blue,
         //Group add button
-        leading: ElevatedButton(
+        leading: IconButton(
+          icon: const Icon(Icons.group_add),
           onPressed: () {},
-          child: Icon(Icons.group_add),
         ),
         title: Text("Menu"),
         centerTitle: true,
@@ -47,6 +48,9 @@ class _MenuScreenState extends State<MenuScreen> {
             child: SizedBox(
               width: 300,
               child: ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                ),
                 onPressed: () {
                   print(check);
                   showprofile();
@@ -66,6 +70,9 @@ class _MenuScreenState extends State<MenuScreen> {
                   SizedBox(
                     width: 300,
                     child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                ),
                       onPressed: () {
                         logout().then((value) {
                           Fluttertoast.showToast(

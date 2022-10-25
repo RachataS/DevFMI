@@ -14,10 +14,11 @@ class _FamilyScreenState extends State<FamilyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         //Group add button
-        leading: ElevatedButton(
+        leading: IconButton(
+          icon: const Icon(Icons.group_add),
           onPressed: () {},
-          child: Icon(Icons.group_add),
         ),
         title: Text("Family"),
         centerTitle: true,
