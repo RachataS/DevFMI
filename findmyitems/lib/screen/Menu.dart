@@ -26,7 +26,6 @@ class _MenuScreenState extends State<MenuScreen> {
   final user = FirebaseAuth.instance.currentUser!;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = new GoogleSignIn();
-  HomeScreen check = HomeScreen();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +51,6 @@ class _MenuScreenState extends State<MenuScreen> {
                   primary: Colors.blue,
                 ),
                 onPressed: () {
-                  print(check);
                   showprofile();
                   /*Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return GoogleProfileScreen();
@@ -71,8 +69,8 @@ class _MenuScreenState extends State<MenuScreen> {
                     width: 300,
                     child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                ),
+                        primary: Colors.blue,
+                      ),
                       onPressed: () {
                         logout().then((value) {
                           Fluttertoast.showToast(
@@ -103,14 +101,14 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   Future<Null> showprofile() async {
-      if(user.photoURL != null){
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
+    if (user.photoURL != null) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
         return GoogleProfileScreen();
       }));
-      }else{
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
         return EmailProfileScreen();
       }));
-      }
+    }
   }
 }

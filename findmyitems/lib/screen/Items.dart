@@ -30,7 +30,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
           centerTitle: true,
         ),
         body: Center(
-          child: Column(),
+          child: Column(
+            children: [TextFormField()],
+          ),
         ));
   }
 }

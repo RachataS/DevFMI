@@ -17,7 +17,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  var password1, password2;
+  var password1;
+  var password2;
   final formKey = GlobalKey<FormState>();
   Profile profile = Profile();
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
@@ -106,14 +107,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                           child: TextFormField(
+                              controller: password2,
                               validator: ((password2) {
                                 if (password2!.isEmpty) {
                                   return 'โปรดยืนยันรหัสผ่าน';
                                 } else if (password2.length < 8) {
                                   return 'รหัสผ่านต้องยาวกว่า 8 ตัวอักษร';
-                                } else if (password1 != password2) {
+                                } /*else if (profile.password != password2) {
                                   return 'รหัสผ่านไม่ตรงกัน';
-                                }
+                                }*/
                               }),
                               onSaved: (password2) {
                                 profile.conpassword = password2;
