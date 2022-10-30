@@ -20,19 +20,37 @@ class _EmailProfileScreenState extends State<EmailProfileScreen> {
         centerTitle: true,
         backgroundColor: Colors.blue,
       ),
-      /*body: StreamBuilder(
-        stream: FirebaseFirestore.instance?.collection("Profile").snapshots(),
-        builder: (context,AsyncSnapshot<QuerySnapshot> snapshot){
-          if (!snapshot.hasData){
-            return Center(child: CircularProgressIndicator(),);
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("Profile").snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
-          return ListView(children: [
-            snapshot.data.docs.map((document) {
-              return Container(child: ListView,)
-            })
-          ],);
+          return ListView(
+              children: snapshot.data!.docs.map((File) {
+            return Container(
+                child: Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                    child: SizedBox(
+                      child: CircleAvatar(
+                        backgroundImage:
+                            AssetImage("assets/images/favicon.png"),
+                        backgroundColor: Colors.blue,
+                        radius: 50,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ));
+          }).toList());
         },
-        ),*/
+      ),
     );
   }
 }
