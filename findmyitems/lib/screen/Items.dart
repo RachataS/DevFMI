@@ -20,19 +20,28 @@ class _ItemsScreenState extends State<ItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          //Group add button
-          leading: IconButton(
-            icon: const Icon(Icons.group_add),
-            onPressed: () {},
-          ),
-          title: Text("Items"),
-          centerTitle: true,
+      appBar: AppBar(
+        //Group add button
+        leading: IconButton(
+          icon: const Icon(Icons.group_add),
+          onPressed: () {},
         ),
-        body: Center(
-          child: Column(
-            children: [TextFormField()],
-          ),
-        ));
+        title: Text("Items"),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          children: [TextFormField()],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: AddItems,
+        child: const Icon(Icons.add),
+      ),
+    );
   }
+}
+
+AddItems() {
+  print("duck");
 }
