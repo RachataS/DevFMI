@@ -36,7 +36,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: AddItems,
-        child: const Icon(Icons.group),
+        child: const Icon(Icons.add),
       ),
     );
   }
