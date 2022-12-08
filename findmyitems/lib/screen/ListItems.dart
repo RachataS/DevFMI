@@ -16,7 +16,7 @@ class ListItemsScreen extends StatefulWidget {
 
 class _ListItemsScreenState extends State<ListItemsScreen> {
   //Field
-  List<ItemsModel> itemsModels = List();
+  List<ItemsModel> itemsModels = [];
 
   //Medhod
   @override
@@ -35,8 +35,12 @@ class _ListItemsScreenState extends State<ListItemsScreen> {
         print("snapshot = $snapshot");
         print('Name = ${snapshot.data()}');
 
+        var itemsDoc = snapshot.data();
+
         ItemsModel itemsModel = ItemsModel.fromMap(snapshot.data());
-        itemsModels.add(itemsModel);
+        setState(() {
+          itemsModels.add(itemsModel);
+        });
       }
     });
   }
@@ -44,7 +48,11 @@ class _ListItemsScreenState extends State<ListItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("List Screen"),
+      child: ListView.builder(
+          itemCount: itemsModels.length,
+          itemBuilder: ((BuildContext buildContext, int index) {
+            return Text(itemsModels[index].name);
+          })),
     );
   }
 }
