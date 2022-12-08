@@ -4,7 +4,6 @@ import 'package:findmyitems/screen/emailprofile.dart';
 import 'package:findmyitems/screen/googleprofile.dart';
 import 'package:findmyitems/screen/home.dart';
 import 'package:findmyitems/screen/mainhome.dart';
-import 'package:findmyitems/screen/realHome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';

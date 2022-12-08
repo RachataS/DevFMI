@@ -5,7 +5,6 @@ import 'package:findmyitems/screen/Items.dart';
 import 'package:findmyitems/screen/Menu.dart';
 import 'package:findmyitems/screen/Search.dart';
 import 'package:findmyitems/screen/home.dart';
-import 'package:findmyitems/screen/realHome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
