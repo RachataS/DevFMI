@@ -15,6 +15,7 @@ class ListItemsScreen extends StatefulWidget {
 }
 
 class _ListItemsScreenState extends State<ListItemsScreen> {
+  /*
   //Field
   List<ItemsModel> itemsModels = [];
 
@@ -33,9 +34,7 @@ class _ListItemsScreenState extends State<ListItemsScreen> {
       List<DocumentSnapshot> snapshots = response.docs;
       for (var snapshot in snapshots) {
         print("snapshot = $snapshot");
-        print('Name = ${snapshot.data()}');
-
-        var itemsDoc = snapshot.data();
+        print('data = ${snapshot.data()}');
 
         ItemsModel itemsModel = ItemsModel.fromMap(snapshot.data());
         setState(() {
@@ -44,15 +43,47 @@ class _ListItemsScreenState extends State<ListItemsScreen> {
       }
     });
   }
-
+  */
   @override
   Widget build(BuildContext context) {
-    return Container(
+    /*return Container(
       child: ListView.builder(
           itemCount: itemsModels.length,
           itemBuilder: ((BuildContext buildContext, int index) {
             return Text(itemsModels[index].name);
           })),
+    );
+  }*/
+    ItemsModel items = ItemsModel();
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance.collection("Items").snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return ListView(
+            children: snapshot.data!.docs.map((File) {
+          return Container(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 30, 10, 0),
+                  child: SizedBox(
+                    child: CircleAvatar(
+                      backgroundImage: items.image,
+                      backgroundColor: Colors.blue,
+                      radius: 50,
+                    ),
+                  ),
+                ),
+                Text(items.name),
+              ],
+            ),
+          );
+        }).toList());
+      },
     );
   }
 }

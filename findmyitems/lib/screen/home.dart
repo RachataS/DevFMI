@@ -90,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (formKey.currentState!.validate()) {
                                     formKey.currentState?.save();
                                     try {
-                                      //check.check += 1;
                                       await FirebaseAuth.instance
                                           .signInWithEmailAndPassword(
                                               email: profile.email,
