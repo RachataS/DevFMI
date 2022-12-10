@@ -39,6 +39,9 @@ dependencies:
   font_awesome_flutter: ^10.2.1
   provider: ^6.0.4
   cloud_firestore: ^3.5.1
+  animated_search_bar: ^2.3.0
+
+
 flutter_icons:
   android: true
   image_path: "assets/images/favicon.png"

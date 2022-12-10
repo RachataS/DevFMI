@@ -15,7 +15,6 @@ class ListItemsScreen extends StatefulWidget {
 }
 
 class _ListItemsScreenState extends State<ListItemsScreen> {
-  /*
   //Field
   List<ItemsModel> itemsModels = [];
 
@@ -32,29 +31,31 @@ class _ListItemsScreenState extends State<ListItemsScreen> {
     CollectionReference collectionReference = firestore.collection("Items");
     await collectionReference.snapshots().listen((response) {
       List<DocumentSnapshot> snapshots = response.docs;
+
       for (var snapshot in snapshots) {
         print("snapshot = $snapshot");
         print('data = ${snapshot.data()}');
+        print('oooo${snapshot.runtimeType}');
 
-        ItemsModel itemsModel = ItemsModel.fromMap(snapshot.data());
+        /*ItemsModel itemsModel = ItemsModel.fromMap(snapshot.data());
         setState(() {
           itemsModels.add(itemsModel);
-        });
+        });*/
       }
     });
   }
-  */
+
   @override
   Widget build(BuildContext context) {
-    /*return Container(
+    return Container(
       child: ListView.builder(
           itemCount: itemsModels.length,
           itemBuilder: ((BuildContext buildContext, int index) {
             return Text(itemsModels[index].name);
           })),
     );
-  }*/
-    ItemsModel items = ItemsModel();
+  }
+  /*ItemsModel items = ItemsModel();
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection("Items").snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -84,6 +85,5 @@ class _ListItemsScreenState extends State<ListItemsScreen> {
           );
         }).toList());
       },
-    );
-  }
+    );*/
 }
