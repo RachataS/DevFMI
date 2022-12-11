@@ -23,7 +23,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
 
   //Method
   @override
-  void initState() {
+  /*void initState() {
     // TODO: implement initState
     super.initState();
     readAllData();
@@ -34,11 +34,11 @@ class _ItemsScreenState extends State<ItemsScreen> {
     CollectionReference collectionReference = firestore.collection("Items");
     await collectionReference.snapshots().listen((response) {
       List<DocumentSnapshot> snapshots = response.docs;
-      for (var snapshots in snapshots) {
-        print("snapshot = $snapshots");
+      for (var snapshot in snapshots) {
+        print("snapshot = $snapshot");
       }
     });
-  }
+  }*/
 
   int currentIndex = 0;
   Profile profile = Profile();
@@ -62,14 +62,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return AddItemScreen();
           }));
-          AddItems();
         },
         child: const Icon(Icons.add),
       ),
     );
   }
-}
-
-AddItems() {
-  print("duck");
 }

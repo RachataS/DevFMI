@@ -55,35 +55,4 @@ class _ListItemsScreenState extends State<ListItemsScreen> {
           })),
     );
   }
-  /*ItemsModel items = ItemsModel();
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("Items").snapshots(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return ListView(
-            children: snapshot.data!.docs.map((File) {
-          return Container(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 30, 10, 0),
-                  child: SizedBox(
-                    child: CircleAvatar(
-                      backgroundImage: items.image,
-                      backgroundColor: Colors.blue,
-                      radius: 50,
-                    ),
-                  ),
-                ),
-                Text(items.name),
-              ],
-            ),
-          );
-        }).toList());
-      },
-    );*/
 }

@@ -37,8 +37,8 @@ class _SearchScreenState extends State<SearchScreen> {
           hintStyle: TextStyle(color: Colors.white70),
           border: InputBorder.none,
         ),
-        //centerTitle: true,
       ),
+      centerTitle: true,
     ));
   }
 }
