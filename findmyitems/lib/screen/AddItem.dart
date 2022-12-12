@@ -61,7 +61,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                    child: TextFormField(
+                    child: SizedBox(
+                      child: TextFormField(
                         validator: RequiredValidator(
                             errorText: 'กรุณากรอกรายละเอียดสถานที่เก็บ'),
                         onSaved: (var detail) {
@@ -71,7 +72,11 @@ class _AddItemScreenState extends State<AddItemScreen> {
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelText: 'Detail',
-                        )),
+                        ),
+                        maxLines: 5,
+                        minLines: 1,
+                      ),
+                    ),
                   ),
                   SizedBox(
                     width: 350,
