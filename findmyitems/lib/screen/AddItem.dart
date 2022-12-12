@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findmyitems/model/Items.dart';
 import 'package:findmyitems/screen/ListItems.dart';
+import 'package:findmyitems/screen/mainhome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -220,7 +221,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 msg: "บันทึกข้อมูลสำเร็จ", gravity: ToastGravity.TOP);
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) {
-              return ListItemsScreen();
+              return mainHomeScreen();
             }));
           }
           formKey.currentState?.reset();
