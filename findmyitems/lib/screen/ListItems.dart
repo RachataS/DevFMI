@@ -33,9 +33,7 @@ class _ListItemsScreenState extends State<ListItemsScreen> {
       List<DocumentSnapshot> snapshots = response.docs;
 
       for (var snapshot in snapshots) {
-        print("snapshot = $snapshot");
-        print('data = ${snapshot.data()}');
-        print('oooo${snapshot.runtimeType}');
+        print('data = ');
 
         /*ItemsModel itemsModel = ItemsModel.fromMap(snapshot.data());
         setState(() {

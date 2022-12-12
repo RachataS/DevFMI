@@ -1,7 +1,10 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findmyitems/model/Items.dart';
+import 'package:findmyitems/screen/Items.dart';
 import 'package:findmyitems/screen/ListItems.dart';
+import 'package:findmyitems/screen/home.dart';
+import 'package:findmyitems/screen/mainhome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -95,6 +98,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
   Widget build(BuildContext context) {
     final hours = dateTime.hour.toString().padLeft(2, '0');
     final minutes = dateTime.minute.toString().padLeft(2, '0');
+    var newDateTime;
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Item"),
@@ -124,7 +128,10 @@ class _AddItemScreenState extends State<AddItemScreen> {
                     child: TextFormField(
                         validator: RequiredValidator(
                             errorText: 'กรุณากรอกชื่อสิ่งของ'),
-                        onSaved: (var username) {},
+                        onSaved: (var name) {
+                          _itemsModel.name = name;
+                          _itemsModel.date_time = newDateTime;
+                        },
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelText: 'Item name',
@@ -132,15 +139,22 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                    child: TextFormField(
+                    child: SizedBox(
+                      child: TextFormField(
                         validator: RequiredValidator(
                             errorText: 'กรุณากรอกรายละเอียดสถานที่เก็บ'),
-                        onSaved: (var email) {},
+                        onSaved: (var detail) {
+                          _itemsModel.detail = detail;
+                        },
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelText: 'Detail',
-                        )),
+                        ),
+                        maxLines: 5,
+                        minLines: 1,
+                      ),
+                    ),
                   ),
                   SizedBox(
                     width: 350,
@@ -156,9 +170,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
                           date.year,
                         );
                         setState(() => this.dateTime = dateTime);
-                        setState(
-                          () => this.dateTime = _itemsModel.date_time,
-                        );
                       },
                     ),
                   ),
@@ -169,8 +180,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       onPressed: () async {
                         final time = await pickTime();
                         if (time == null) return;
-
-                        final newDateTime = DateTime(
+                        newDateTime = DateTime(
                           dateTime.day,
                           dateTime.month,
                           dateTime.year,
@@ -188,16 +198,25 @@ class _AddItemScreenState extends State<AddItemScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
+          print(newDateTime);
           if (formKey.currentState!.validate()) {
             formKey.currentState?.save();
-
-            Fluttertoast.showToast(
-                msg: "บันทึกข้อมูลสำเร็จ", gravity: ToastGravity.TOP);
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) {
-              return ListItemsScreen();
-            }));
+            try {
+              await _notgoogleprofileCollection.add({
+                "Name": _itemsModel.name,
+                "Detail": _itemsModel.detail,
+                "date_time": _itemsModel.date_time,
+              });
+              Fluttertoast.showToast(
+                  msg: "บันทึกข้อมูลสำเร็จ", gravity: ToastGravity.TOP);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return mainHomeScreen();
+              }));
+            } on FirebaseAuthException catch (e) {
+              Fluttertoast.showToast(msg: e.code, gravity: ToastGravity.TOP);
+            }
           }
           formKey.currentState?.reset();
         },
