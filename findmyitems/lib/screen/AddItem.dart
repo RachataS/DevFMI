@@ -1,13 +1,12 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findmyitems/model/Items.dart';
-import 'package:findmyitems/screen/Items.dart';
 import 'package:findmyitems/screen/ListItems.dart';
-import 'package:findmyitems/screen/home.dart';
-import 'package:findmyitems/screen/mainhome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,24 +28,32 @@ class _AddItemScreenState extends State<AddItemScreen> {
   CollectionReference _notgoogleprofileCollection =
       FirebaseFirestore.instance.collection("Items");
 
-  var imageFile;
+  File? imageFile;
 
-  _openGallary(BuildContext context) async {
-    var picture =
-        await ImagePicker.platform.getImage(source: ImageSource.gallery);
-    this.setState(() {
-      imageFile = picture;
-    });
-    Navigator.of(context).pop();
+  Future _openGallary(BuildContext context) async {
+    try {
+      var picture =
+          await ImagePicker.platform.getImage(source: ImageSource.gallery);
+      if (picture == null) return;
+      final image = File(picture.path);
+      setState(() => this.imageFile = image);
+      Navigator.of(context).pop();
+    } on PlatformException catch (e) {
+      print(e);
+    }
   }
 
-  _openCamera(BuildContext context) async {
-    var picture =
-        await ImagePicker.platform.getImage(source: ImageSource.camera);
-    this.setState(() {
-      imageFile = picture;
-    });
-    Navigator.of(context).pop();
+  Future _openCamera(BuildContext context) async {
+    try {
+      var picture =
+          await ImagePicker.platform.getImage(source: ImageSource.camera);
+      if (picture == null) return;
+      final image = File(picture.path);
+      setState(() => this.imageFile = image);
+      Navigator.of(context).pop();
+    } on PlatformException catch (e) {
+      print(e);
+    }
   }
 
   Future<void> _showChoiceDialog(BuildContext context) {
@@ -82,23 +89,23 @@ class _AddItemScreenState extends State<AddItemScreen> {
         });
   }
 
-  _decideImageView() {
-    if (imageFile == null) {
-      return Text('No image seclected');
-    } else {
-      Image.file(
-        imageFile,
-        width: 400,
-        height: 400,
-      );
-    }
-  }
+  /*_decideImageView() {
+    imageFile != null
+        ? Image.file(
+            imageFile!,
+            width: 160,
+            height: 160,
+            fit: BoxFit.cover,
+          )
+        : FlutterLogo(
+            size: 200,
+          );
+  }*/
 
   @override
   Widget build(BuildContext context) {
     final hours = dateTime.hour.toString().padLeft(2, '0');
     final minutes = dateTime.minute.toString().padLeft(2, '0');
-    var newDateTime;
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Item"),
@@ -114,8 +121,19 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.all(100.0),
-                    child: _decideImageView(),
+                    padding: const EdgeInsets.all(8.0),
+                    child: imageFile != null
+                        ? Image.file(
+                            imageFile!,
+                            width: 200,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'assets/images/camera.png',
+                            width: 200,
+                            height: 200,
+                          ),
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -130,7 +148,6 @@ class _AddItemScreenState extends State<AddItemScreen> {
                             errorText: 'กรุณากรอกชื่อสิ่งของ'),
                         onSaved: (var name) {
                           _itemsModel.name = name;
-                          _itemsModel.date_time = newDateTime;
                         },
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
@@ -139,22 +156,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-                    child: SizedBox(
-                      child: TextFormField(
+                    child: TextFormField(
                         validator: RequiredValidator(
                             errorText: 'กรุณากรอกรายละเอียดสถานที่เก็บ'),
                         onSaved: (var detail) {
                           _itemsModel.detail = detail;
+                          _itemsModel.image = imageFile;
+                          //_itemsModel.date_time = ;
                         },
-                        keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
                           border: UnderlineInputBorder(),
                           labelText: 'Detail',
-                        ),
-                        maxLines: 5,
-                        minLines: 1,
-                      ),
-                    ),
+                        )),
                   ),
                   SizedBox(
                     width: 350,
@@ -180,7 +193,8 @@ class _AddItemScreenState extends State<AddItemScreen> {
                       onPressed: () async {
                         final time = await pickTime();
                         if (time == null) return;
-                        newDateTime = DateTime(
+
+                        final newDateTime = DateTime(
                           dateTime.day,
                           dateTime.month,
                           dateTime.year,
@@ -198,25 +212,16 @@ class _AddItemScreenState extends State<AddItemScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          print(newDateTime);
+        onPressed: () {
           if (formKey.currentState!.validate()) {
             formKey.currentState?.save();
-            try {
-              await _notgoogleprofileCollection.add({
-                "Name": _itemsModel.name,
-                "Detail": _itemsModel.detail,
-                "date_time": _itemsModel.date_time,
-              });
-              Fluttertoast.showToast(
-                  msg: "บันทึกข้อมูลสำเร็จ", gravity: ToastGravity.TOP);
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
-                return mainHomeScreen();
-              }));
-            } on FirebaseAuthException catch (e) {
-              Fluttertoast.showToast(msg: e.code, gravity: ToastGravity.TOP);
-            }
+
+            Fluttertoast.showToast(
+                msg: "บันทึกข้อมูลสำเร็จ", gravity: ToastGravity.TOP);
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) {
+              return ListItemsScreen();
+            }));
           }
           formKey.currentState?.reset();
         },
