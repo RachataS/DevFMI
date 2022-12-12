@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findmyitems/model/Items.dart';
 import 'package:findmyitems/screen/ListItems.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddItemScreen extends StatefulWidget {
   const AddItemScreen({super.key});
@@ -23,6 +25,71 @@ class _AddItemScreenState extends State<AddItemScreen> {
   final Future<FirebaseApp> firebase = Firebase.initializeApp();
   CollectionReference _notgoogleprofileCollection =
       FirebaseFirestore.instance.collection("Items");
+
+  var imageFile;
+
+  _openGallary(BuildContext context) async {
+    var picture =
+        await ImagePicker.platform.getImage(source: ImageSource.gallery);
+    this.setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context).pop();
+  }
+
+  _openCamera(BuildContext context) async {
+    var picture =
+        await ImagePicker.platform.getImage(source: ImageSource.camera);
+    this.setState(() {
+      imageFile = picture;
+    });
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _showChoiceDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Seclect one of this'),
+            content: SingleChildScrollView(
+                child: ListBody(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    child: Text('Gallary'),
+                    onTap: (() {
+                      _openGallary(context);
+                    }),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    child: Text('Camera'),
+                    onTap: () {
+                      _openCamera(context);
+                    },
+                  ),
+                )
+              ],
+            )),
+          );
+        });
+  }
+
+  _decideImageView() {
+    if (imageFile == null) {
+      return Text('No image seclected');
+    } else {
+      Image.file(
+        imageFile,
+        width: 400,
+        height: 400,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +107,18 @@ class _AddItemScreenState extends State<AddItemScreen> {
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             child: SingleChildScrollView(
               child: Column(
-                children: [
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(100.0),
+                    child: _decideImageView(),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _showChoiceDialog(context);
+                    },
+                    child: Text('Seclect Image'),
+                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                     child: TextFormField(
