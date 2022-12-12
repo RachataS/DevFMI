@@ -158,17 +158,20 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
                     child: TextFormField(
-                        validator: RequiredValidator(
-                            errorText: 'กรุณากรอกรายละเอียดสถานที่เก็บ'),
-                        onSaved: (var detail) {
-                          _itemsModel.detail = detail;
-                          _itemsModel.image = imageFile;
-                          //_itemsModel.date_time = ;
-                        },
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelText: 'Detail',
-                        )),
+                      validator: RequiredValidator(
+                          errorText: 'กรุณากรอกรายละเอียดสถานที่เก็บ'),
+                      onSaved: (var detail) {
+                        _itemsModel.detail = detail;
+                        _itemsModel.image = imageFile;
+                        //_itemsModel.date_time = ;
+                      },
+                      decoration: const InputDecoration(
+                        border: UnderlineInputBorder(),
+                        labelText: 'Detail',
+                      ),
+                      maxLines: 5,
+                      minLines: 1,
+                    ),
                   ),
                   SizedBox(
                     width: 350,
@@ -223,6 +226,22 @@ class _AddItemScreenState extends State<AddItemScreen> {
                 MaterialPageRoute(builder: (context) {
               return mainHomeScreen();
             }));
+            try {
+              _notgoogleprofileCollection.add({
+                "Name": _itemsModel.name,
+                "Detail": _itemsModel.detail,
+                "date_time": _itemsModel.date_time,
+                //"imagelocate": _itemsModel.image,
+              });
+              Fluttertoast.showToast(
+                  msg: "บันทึกข้อมูลสำเร็จ", gravity: ToastGravity.TOP);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return mainHomeScreen();
+              }));
+            } on FirebaseAuthException catch (e) {
+              Fluttertoast.showToast(msg: e.code, gravity: ToastGravity.TOP);
+            }
           }
           formKey.currentState?.reset();
         },
