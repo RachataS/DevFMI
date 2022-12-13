@@ -15,42 +15,37 @@ class ListItemsScreen extends StatefulWidget {
 }
 
 class _ListItemsScreenState extends State<ListItemsScreen> {
-  //Field
-  List<ItemsModel> itemsModels = [];
-
-  //Medhod
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    readAllData();
-  }
-
-  Future<void> readAllData() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference collectionReference = firestore.collection("Items");
-    await collectionReference.snapshots().listen((response) {
-      List<DocumentSnapshot> snapshots = response.docs;
-
-      for (var snapshot in snapshots) {
-        print('data = ');
-
-        /*ItemsModel itemsModel = ItemsModel.fromMap(snapshot.data());
-        setState(() {
-          itemsModels.add(itemsModel);
-        });*/
-      }
-    });
-  }
+  ItemsModel _itemsModel = ItemsModel();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-          itemCount: itemsModels.length,
-          itemBuilder: ((BuildContext buildContext, int index) {
-            return Text(itemsModels[index].name);
-          })),
+    return Scaffold(
+      body: StreamBuilder<List<ItemsModel>>(
+        stream: readItems(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final itemsModel = snapshot.data!;
+
+            return ListView(
+              children: itemsModel.map(buildItems).toList(),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
+
+  Stream<List<ItemsModel>> readItems() => FirebaseFirestore.instance
+      .collection('Items')
+      .snapshots()
+      .map((snapshot) =>
+          snapshot.docs.map((doc) => ItemsModel.fromJson(doc.data())).toList());
+
+  Widget buildItems(ItemsModel itemsModel) => ListTile(
+        leading: CircleAvatar(child: Image.network(itemsModel.image)),
+        title: Text(itemsModel.name),
+        subtitle: Text('${itemsModel.detail}\n${itemsModel.date_time}'),
+      );
 }
