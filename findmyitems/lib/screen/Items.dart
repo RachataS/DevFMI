@@ -18,28 +18,8 @@ class ItemsScreen extends StatefulWidget {
 }
 
 class _ItemsScreenState extends State<ItemsScreen> {
-  //Field
-  //List<Items> items = List();
-
   //Method
   @override
-  /*void initState() {
-    // TODO: implement initState
-    super.initState();
-    readAllData();
-  }
-
-  Future<void> readAllData() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference collectionReference = firestore.collection("Items");
-    await collectionReference.snapshots().listen((response) {
-      List<DocumentSnapshot> snapshots = response.docs;
-      for (var snapshot in snapshots) {
-        print("snapshot = $snapshot");
-      }
-    });
-  }*/
-
   int currentIndex = 0;
   Profile profile = Profile();
   HomeScreen home = HomeScreen();

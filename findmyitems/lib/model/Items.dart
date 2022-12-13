@@ -5,6 +5,13 @@ class ItemsModel {
 
   ItemsModel({this.name, this.date_time, this.detail, this.image});
 
+  Map<String, dynamic> toJson() => {
+        'Name': name,
+        'Detail': detail,
+        'date_time': date_time,
+        'imagelocate': image,
+      };
+
   ItemsModel.fromJson(Map<String, dynamic> json) {
     name:
     json['Name'];

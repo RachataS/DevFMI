@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findmyitems/model/Items.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,8 +42,9 @@ class _ListItemsScreenState extends State<ListItemsScreen> {
   Stream<List<ItemsModel>> readItems() => FirebaseFirestore.instance
       .collection('Items')
       .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => ItemsModel.fromJson(doc.data())).toList());
+      .map((snapshot) => snapshot.docs
+          .map((docs) => ItemsModel.fromJson(docs.data()))
+          .toList());
 
   Widget buildItems(ItemsModel itemsModel) => ListTile(
         leading: CircleAvatar(child: Image.network(itemsModel.image)),
